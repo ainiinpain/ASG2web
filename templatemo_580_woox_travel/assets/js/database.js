@@ -16,8 +16,9 @@ const firebaseConfig = {
 
 function save()
 {
-  var email= document.getElementById('Email address').value
-  var password= document.getElementById('Password').value
+  preventDefault()
+  var email= document.getElementById('email').value
+  var password= document.getElementById('password').value
 
   database.ref('users/' + email).set({
     email : email,
