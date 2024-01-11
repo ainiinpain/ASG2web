@@ -26,7 +26,7 @@ const firebaseConfig = {
 
   //database.ref('users/' + email).set({
   //  email : email,
-    password : password
+  //password : password
   //})
   //alert('Saved')
 //}
