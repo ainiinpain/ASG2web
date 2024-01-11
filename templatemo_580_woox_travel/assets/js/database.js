@@ -38,47 +38,53 @@ const firebaseConfig = {
 
 
 //setting up register function
-function register()
-{
-  email = document.getElementById('email').value
-  password=document.getElementById('Password').value
+function register() {
+  event.preventDefault();
+  var email = document.getElementById('email').value;
+  var password = document.getElementById('password').value; // Make sure the ID is correct here
 
-  //validate input fields
-  if (validate_email(email)==false || validate_password(password)==false)
-  {
-    alert ('Email or Password is Incomplete')
-    return
+  // Validate input fields
+  if (!validate_email(email) || !validate_password(password)) {
+    alert('Email or Password is incomplete or not valid');
+    return;
   }
 
-  auth.createUserWithEmailAndPassword (email, password)
-  .then(function()
-  {
-    //add the user info to database 
-    var user = auth.currentUser
+  auth.createUserWithEmailAndPassword(email, password)
+  .then(function(response) {
+    // User account created successfully
+    var user = response.user; // Using response to get user data
 
-    var database_ref = database.ref()
-  
-    //create user data
-    var user_data =
-    {
-      email:email,
-      last_login : Date.now()
+    // Save additional user data to Firebase Realtime Database
+    var user_data = {
+      email: email,
+      name: document.getElementById('name').value,
+      last_login: Date.now()
+    };
 
-    }
-
-    database_ref.child('users/' + user.uid).set(user_data)
-
-    alert ('User Created!')
-
-})
-.catch(function(error)
-{
-  //firebase will alert if there are any errors
-  var error_code = error.code
-  var error_message =error.message 
-  alert(error_message)
-})
+    // Corrected path to use UID provided by Firebase
+    database.ref('users/' + user.uid).set(user_data)
+    .then(function() {
+      alert('User account created and data saved.');
+    })
+    .catch(function(error) {
+      alert('Error saving user data: ' + error.message);
+    });
+  })
+  .catch(function(error) {
+    alert('Error creating user: ' + error.message);
+  });
 }
+
+function validate_password(password) {
+  // Corrected to check password length
+  if (password.length < 6) {
+    return false;
+  } else {
+    return true;
+  }
+}
+
+// ... Keep the rest of your functions unchanged ...
 
 //set up login function 
 function login()

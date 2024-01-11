@@ -1,27 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Your Page Title</title>
-
-    <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css">
-
-    <!-- Your additional stylesheets, if any -->
     <link rel="stylesheet" href="styles.css">
-
-    <!-- Bootstrap JS and Popper.js -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/js/bootstrap.min.js"></script>
-
-    <!-- Your additional scripts, if any -->
+    <script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-auth.js"></script>
 </head>
-
 <body>
-    <!-- Your HTML content goes here -->
     <div class="container">
         <div class="body d-flex align-items-center justify-content-center">
             <div class="box-2">
@@ -40,12 +32,11 @@
                                     <input type="password" class="form-control" id="password" placeholder="Password">
                                 </div>
                                 <div class="form-group">
-                                    <input type="password" class="form-control" id="confirm-password"
-                                        placeholder="Confirm Password">
+                                    <input type="password" class="form-control" id="confirm-password" placeholder="Confirm Password">
                                 </div>
                                 <div class="d-flex flex-row align-items-center justify-content-between">
                                     <a href="login.html">Login</a>
-                                    <button class="btn btn-primary">Create Account</button>
+                                    <button class="btn btn-primary" onclick="register()">Create Account</button>
                                 </div>
                             </form>
                         </div>
@@ -54,6 +45,42 @@
             </div>
         </div>
     </div>
-</body>
+    <!-- Firebase Initialization and Authentication Script -->
+    <!-- Script for Firebase -->
+    <script>
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCH7LX3EBZNUnm0Z7QYdmrPKa01LafYAgM", 
+            authDomain: "dda-project-test-1-f4af8.firebaseapp.com", 
+            databaseURL: "https://dda-project-test-1-f4af8-default-rtdb.asia-southeast1.firebasedatabase.app", 
+            projectId: "dda-project-test-1-f4af8", 
+            storageBucket: "dda-project-test-1-f4af8.appspot.com", 
+            messagingSenderId: "239445133731", 
+            appId: "1:239445133731:web:15c3b569d08dfa1ee3f216" 
+        };
+        // Initialize Firebase
+        const app = firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
 
+        function save(event) {
+            event.preventDefault();
+            var email = document.getElementById('email').value;
+            var password = document.getElementById('password').value;
+
+            // Encode email
+            var emailKey = email.replace(/\./g, ',');
+
+            database.ref('users/' + emailKey).set({
+                email: email,
+                password: password // Note: Storing plain text passwords is not secure
+            })
+            .then(function() {
+                alert('Saved');
+            })
+            .catch(function(error) {
+                alert('Error: ' + error.message);
+            });
+        }
+    </script>
+    </body>
 </html>
